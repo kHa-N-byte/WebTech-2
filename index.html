@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blood Donor Registration</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        form {
+            width: 500px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 7px;
+            box-sizing: border-box;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            width: auto;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            display: block;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #cf0606;
+            color: white;
+        }
+
+        h1, h2, #count {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 style="color: #cf0606;">Blood Donor Registration</h1>
+
+    <form id="regForm" method="post" action="#" novalidate
+          onsubmit="return validateForm()">
+
+        <label for="fname">Full Name:</label>
+        <input type="text" id="fname" name="fname"
+               required minlength="3">
+        <span class="error" id="err-fname"></span>
+
+        <label for="sid">AIUB ID:</label>
+        <input type="text" id="sid" name="sid"
+               required pattern="22 to 26-[0-9]{5}-1">
+        <span class="error" id="err-sid"></span>
+
+        <label for="phone">Mobile:</label>
+        <input type="text" id="phone" name="phone"
+               required pattern="[0-9]{11}">
+        <span class="error" id="err-phone"></span>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age"
+               required min="18" max="60">
+        <span class="error" id="err-age"></span>
+
+        <label for="bgroup">Blood Group:</label>
+        <select id="bgroup" name="bgroup" required>
+            <option value="">Select blood group</option>
+            <option>A+</option>
+            <option>A-</option>
+            <option>B+</option>
+            <option>B-</option>
+            <option>O+</option>
+            <option>O-</option>
+            <option>AB+</option>
+            <option>AB-</option>
+        </select>
+        <span class="error" id="err-bgroup"></span>
+
+        <label>Donated before?</label>
+
+        <input type="radio" id="donated-yes"
+               name="donated" value="Yes" required><br>
+        <label for="donated-yes">Yes</label>
+
+        <input aligne="right" type="radio" id="donated-no"
+               name="donated" value="No" required><br>
+        <label aligne="right" for="donated-no">No</label>
+
+        <span class="error" id="err-donated"></span>
+
+        <label aligne="right" for="agree">
+            <input type="checkbox" id="agree" name="agree" required>
+            I am healthy and willing to donate</label>
+        <span class="error" id="err-agree"></span>
+
+        <label for="pass">Password:</label>
+        <input type="password" id="pass" name="pass"
+               required minlength="6">
+        <span class="error" id="err-pass"></span>
+
+        <label for="pass2">Confirm Password:</label>
+        <input type="password" id="pass2" name="pass2"
+               required>
+        <span class="error" id="err-pass2"></span>
+
+        <button type="submit">Register Donor</button>
+        <button type="reset">Reset</button>
+
+    </form>
+
+    <p id="count">Total donors: 0</p>
+    <h2>Registered Donors</h2>
+    <table id="list">
+    <thead>
+        <tr>
+                <th>Name</th>
+                <th>ID</th>
+                <th>Blood Group</th>
+                <th>Action</th>
+         </tr>
+        </thead>
+
+    <tbody id="donorBody">
+</tbody>
+</table>
+</div>
+<script>
+    let donors = [];
+    function validateForm() {
+
+        let ok = true;
+
+        const fname = document.getElementById("fname").value;
+        const sid = document.getElementById("sid").value;
+        const phone = document.getElementById("phone").value;
+        const age = document.getElementById("age").value;
+        const bgroup = document.getElementById("bgroup").value;
+        const donated = document.querySelector('input[name="donated"]:checked');
+
+        const agree = document.getElementById("agree").checked;
+
+        const pass = document.getElementById("pass").value;
+
+        const pass2 = document.getElementById("pass2").value;
+
+        
+        if(fname.trim().length < 3) {
+            document.getElementById("err-fname").innerHTML =
+                "Name must have at least 3 characters.";
+            ok = false;
+        } else {
+            document.getElementById("err-fname").innerHTML = "";
+        }
+if (!/^24-\d{5}-1$|^23-\d{5}-[23]$|^22-\d{5}-2$/.test(sid)) {
+    document.getElementById("err-sid").innerHTML =
+        "Enter a valid AIUB ID.";
+    ok = false;
+} else {
+    document.getElementById("err-sid").innerHTML = "";
+}
+     
+   
+        if (!/^\d{11}$/.test(phone)) {
+            document.getElementById("err-phone").innerHTML =
+                "Mobile must contain exactly 11 digits.";
+            ok = false;
+        } else {
+            document.getElementById("err-phone").innerHTML = "";
+        }
+
+      
+        let ageNum = Number(age);
+
+        if (age === "" || isNaN(ageNum) || ageNum < 18 || ageNum > 60) {
+            document.getElementById("err-age").innerHTML =
+                "Age must be between 18 and 60.";
+            ok = false;
+        } else {
+            document.getElementById("err-age").innerHTML = "";
+        }
+
+        
+        if (bgroup === "") {
+            document.getElementById("err-bgroup").innerHTML =
+                "Please select blood group.";
+            ok = false;
+        } else {
+            document.getElementById("err-bgroup").innerHTML = "";
+        }
+
+       
+        if (!donated) {
+            document.getElementById("err-donated").innerHTML =
+                "Please select Yes or No.";
+            ok = false;
+        } else {
+            document.getElementById("err-donated").innerHTML = "";
+        }
+
+   
+        if (!agree) {
+            document.getElementById("err-agree").innerHTML =
+                "You must agree to the terms.";
+            ok = false;
+        }
+        else{
+            document.getElementById("err-agree").innerHTML = "";
+        }
+
+       
+        if(pass.length < 6){
+            document.getElementById("err-pass").innerHTML =
+                "Password must have at least 6 characters.";
+            ok = false;
+        } else {
+            document.getElementById("err-pass").innerHTML = "";
+        }
+
+        if(pass2 === "" || pass2 !== pass) {
+            document.getElementById("err-pass2").innerHTML =
+                "Passwords do not match.";
+            ok = false;
+        } else {
+            document.getElementById("err-pass2").innerHTML = "";
+        }
+
+       
+        if (ok) {
+
+            let donor = {
+                name: fname.trim(),
+                id: sid,
+                group: bgroup
+            };
+
+            donors.push(donor);
+
+            let tbody = document.getElementById("donorBody");
+
+            let tr = document.createElement("tr");
+
+            let td1 = document.createElement("td");
+            td1.innerHTML = donor.name;
+
+            let td2 = document.createElement("td");
+            td2.innerHTML = donor.id;
+
+            let td3 = document.createElement("td");
+            td3.innerHTML = donor.group;
+
+            let td4 = document.createElement("td");
+
+            let btn = document.createElement("button");
+            btn.innerHTML = "Remove";
+
+            btn.addEventListener("click", function () {
+
+                let index = donors.indexOf(donor);
+
+                donors.splice(index, 1);
+
+                tr.remove();
+
+                updateCount();
+
+            });
+
+            td4.appendChild(btn);
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+
+            tbody.appendChild(tr);
+
+            updateCount();
+
+            document.getElementById("regForm").reset();
+
+        }
+
+        return false;
+    }
+    function updateCount() {
+
+        document.getElementById("count").innerHTML =
+            "Total donors: " + donors.length;
+
+    }
+
+</script>
+
+</body>
+</html>
