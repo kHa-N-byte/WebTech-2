@@ -73,6 +73,22 @@
             max-width: 700px;
             margin: auto;
         }
+        .radio-group {
+    display: flex;
+    gap: 25px;
+    margin-top: 5px;
+}
+
+.radio-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.radio-option label {
+    margin-top: 0;
+    margin-bottom: 4px;
+}
     </style>
 </head>
 
@@ -121,15 +137,19 @@
 
         <label>Donated before?</label>
 
-        <input type="radio" id="donated-yes"
-               name="donated" value="Yes" required><br>
+<div class="radio-group">
+    <div class="radio-option">
         <label for="donated-yes">Yes</label>
+        <input type="radio" id="donated-yes" name="donated" value="Yes" required>
+    </div>
 
-        <input aligne="right" type="radio" id="donated-no"
-               name="donated" value="No" required><br>
-        <label aligne="right" for="donated-no">No</label>
+    <div class="radio-option">
+        <label for="donated-no">No</label>
+        <input type="radio" id="donated-no" name="donated" value="No" required>
+    </div>
+</div>
 
-        <span class="error" id="err-donated"></span>
+<span class="error" id="err-donated"></span>
 
         <label aligne="right" for="agree">
             <input type="checkbox" id="agree" name="agree" required>
